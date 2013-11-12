@@ -1,6 +1,7 @@
 #include "oclint/AbstractASTVisitorRule.h"
 #include "oclint/RuleSet.h"
 #include "oclint/util/StdUtil.h"
+#include "oclint/util/ASTUtil.h"
 
 using namespace std;
 using namespace clang;
@@ -21,7 +22,7 @@ private:
     {
         // TODO: Return whether or not the localizedStringKey is missing 
         // from Localizable.strings
-        return false;
+        return localizedStringKey == "Test";
     }
 
 public:
@@ -44,7 +45,8 @@ public:
     {
         Expr *receiverExpr = objCMsgExpr->getInstanceReceiver();
         string selectorString = objCMsgExpr->getSelector().getAsString();
-        string localizedStringKey = objCMsgExpr->getArg(0).getAsString();
+        ObjCStringLiteral *localizedStringKeyLiteral = (ObjCStringLiteral *)(objCMsgExpr->getArg(0));
+        string localizedStringKey = localizedStringKeyLiteral->getString()->getString().str();
 
         if (receiverExpr && isa<ImplicitCastExpr>(receiverExpr) &&
             isLocalizedStringGetSelector(receiverExpr, selectorString) &&

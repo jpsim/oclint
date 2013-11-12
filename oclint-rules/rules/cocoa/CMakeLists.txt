@@ -1,5 +1,5 @@
 SET(LIST_OF_RULES
-    MissingLocalizedStringRule
+    MissingLocalizedString
     ObjCVerifyMustCallSuper
     )
 
